@@ -1,0 +1,16 @@
+theme: jekyll-theme-cayman
+
+title: File Uploader — Symfony
+description: "Chunked file uploader bundle for Symfony 6.4/7 (Upload Protocol v1)"
+
+exclude:
+  - vendor/
+  - src/
+  - tests/
+  - config/
+  - public/
+  - Makefile
+  - composer.json
+  - phpstan.neon.dist
+  - phpunit.xml.dist
+  - pint.json

@@ -4,6 +4,25 @@ All notable changes to `xakki/file-uploader-symfony` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-06-22
+
+### Removed
+
+- **Dropped Symfony 6.4 support.** The bundle now requires Symfony 7 or 8;
+  every Symfony dependency constraint moved from `^6.4|^7.0` to `^7.0|^8.0`.
+
+### Changed
+
+- Widened the `phpunit/phpunit` constraint to include 12/13; dependencies updated
+  to their latest stable versions.
+
+### Fixed
+
+- Test suite compatibility with Symfony 8.1 (`KernelTestCase::runCommand()` became
+  static); the `CommandTest` private helper was renamed to `runUploaderCommand()`.
+
+[0.4.0]: https://github.com/Xakki/file-uploader-symfony/releases/tag/v0.4.0
+
 ## [0.3.3] - 2026-06-15
 
 ### Changed

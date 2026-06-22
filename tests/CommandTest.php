@@ -42,7 +42,7 @@ final class CommandTest extends KernelTestCase
         (new Filesystem)->mkdir($root);
         file_put_contents($root.'/hello.txt', $content);
 
-        $tester = $this->runCommand('file-uploader:sync-metadata');
+        $tester = $this->runUploaderCommand('file-uploader:sync-metadata');
 
         $tester->assertCommandIsSuccessful();
         self::assertStringContainsString('Created: 1', $tester->getDisplay());
@@ -72,7 +72,7 @@ final class CommandTest extends KernelTestCase
             'userId' => null,
         ], JSON_PRETTY_PRINT));
 
-        $tester = $this->runCommand('file-uploader:cleanup');
+        $tester = $this->runUploaderCommand('file-uploader:cleanup');
 
         $tester->assertCommandIsSuccessful();
         self::assertStringContainsString('Removed 1', $tester->getDisplay());
@@ -88,7 +88,7 @@ final class CommandTest extends KernelTestCase
         return self::$kernel->uploadRoot();
     }
 
-    private function runCommand(string $name): CommandTester
+    private function runUploaderCommand(string $name): CommandTester
     {
         $application = new Application(self::$kernel);
         $tester = new CommandTester($application->find($name));

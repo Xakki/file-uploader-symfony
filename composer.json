@@ -1,29 +1,29 @@
 {
     "name": "xakki/file-uploader-symfony",
-    "version": "0.3.4",
-    "description": "Chunked file uploader bundle for Symfony 6.4/7 (Upload Protocol v1).",
+    "version": "0.4.0",
+    "description": "Chunked file uploader bundle for Symfony 7/8 (Upload Protocol v1).",
     "type": "symfony-bundle",
     "license": "Apache-2.0",
     "require": {
         "php": "^8.3|^8.4|^8.5",
         "xakki/file-uploader": "^0.3.4",
         "league/flysystem": "^3",
-        "symfony/config": "^6.4|^7.0",
-        "symfony/console": "^6.4|^7.0",
-        "symfony/dependency-injection": "^6.4|^7.0",
-        "symfony/framework-bundle": "^6.4|^7.0",
-        "symfony/http-foundation": "^6.4|^7.0",
-        "symfony/http-kernel": "^6.4|^7.0",
-        "symfony/mime": "^6.4|^7.0",
-        "symfony/routing": "^6.4|^7.0",
-        "symfony/security-core": "^6.4|^7.0"
+        "symfony/config": "^7.0|^8.0",
+        "symfony/console": "^7.0|^8.0",
+        "symfony/dependency-injection": "^7.0|^8.0",
+        "symfony/framework-bundle": "^7.0|^8.0",
+        "symfony/http-foundation": "^7.0|^8.0",
+        "symfony/http-kernel": "^7.0|^8.0",
+        "symfony/mime": "^7.0|^8.0",
+        "symfony/routing": "^7.0|^8.0",
+        "symfony/security-core": "^7.0|^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10|^11",
-        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "phpunit/phpunit": "^10|^11|^12|^13",
+        "symfony/phpunit-bridge": "^7.0|^8.0",
         "phpstan/phpstan": "^1.12|^2.0",
         "laravel/pint": "*",
-        "symfony/security-csrf": "^6.4|^7.0"
+        "symfony/security-csrf": "^7.0|^8.0"
     },
     "suggest": {
         "symfony/clock": "Provides a test-controllable PSR-20 clock (set clock_service: 'Psr\\Clock\\ClockInterface').",

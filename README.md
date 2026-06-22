@@ -1,6 +1,6 @@
 # xakki/file-uploader-symfony
 
-Chunked file uploader **bundle for Symfony 6.4 / 7**, speaking
+Chunked file uploader **bundle for Symfony 7 / 8**, speaking
 **[Upload Protocol v1](https://github.com/Xakki/file-uploader/blob/main/protocol/SPEC.md)**. A thin binding over the
 framework-agnostic [`xakki/file-uploader`](https://github.com/Xakki/file-uploader)
 ([Packagist](https://packagist.org/packages/xakki/file-uploader)) core — all upload logic

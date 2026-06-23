@@ -4,6 +4,27 @@ All notable changes to `xakki/file-uploader-symfony` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.4.1] - 2026-06-23
+
+### Added
+
+- **Age-based GC of abandoned staged files** (`file-uploader:cleanup`). Beyond the
+  core trash sweep, the command now also handles two leaks that previously grew
+  unbounded on a staging area:
+  - `active_ttl_days` (default `null` = disabled): when set (> 0), PURGES active
+    (non-trashed) files older than N days. Opt-in so a general uploader never
+    silently expires live files.
+  - `chunk_ttl_days` (default `0` = disabled): when set (> 0), removes incomplete
+    `.chunks/<uploadId>/` directories from aborted uploads whose newest chunk is
+    older than N days. Opt-in for BC symmetry with `active_ttl_days`.
+  Both run inside the existing `file-uploader:cleanup` invocation — no cron change.
+  Implemented in the bundle (`StagingGarbageCollector`) over the core public API
+  plus the bundle's own Flysystem operator; no core change required.
+
+[0.4.1]: https://github.com/Xakki/file-uploader-symfony/releases/tag/v0.4.1
+
 ## [0.4.0] - 2026-06-22
 
 ### Removed

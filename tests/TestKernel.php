@@ -20,6 +20,14 @@ final class TestKernel extends Kernel
 {
     use MicroKernelTrait;
 
+    /**
+     * Overridable GC knobs so tests can exercise active-file expiry and chunk-dir
+     * cleanup. Defaults mirror the bundle config (active expiry disabled).
+     */
+    public static ?int $activeTtlDays = null;
+
+    public static int $chunkTtlDays = 0;
+
     private string $varDir;
 
     public function __construct(string $environment, bool $debug)
@@ -65,6 +73,8 @@ final class TestKernel extends Kernel
             'storage' => ['local_root' => $this->uploadRoot()],
             'allowed_extensions' => [],          // allow any extension in tests
             'allow_delete_all_files' => true,    // delete as guest (no SecurityBundle here)
+            'active_ttl_days' => self::$activeTtlDays,
+            'chunk_ttl_days' => self::$chunkTtlDays,
         ]);
     }
 

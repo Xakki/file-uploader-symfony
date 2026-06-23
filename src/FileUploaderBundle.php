@@ -22,6 +22,7 @@ use Xakki\SymfonyFileUploader\Http\FileController;
 use Xakki\SymfonyFileUploader\Http\UploadController;
 use Xakki\SymfonyFileUploader\Security\SymfonyUserResolver;
 use Xakki\SymfonyFileUploader\Service\FileWidgetRenderer;
+use Xakki\SymfonyFileUploader\Service\StagingGarbageCollector;
 use Xakki\SymfonyFileUploader\Storage\StorageFactory;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -87,6 +88,14 @@ final class FileUploaderBundle extends AbstractBundle
             ->variableNode('allowed_extensions')->defaultValue(self::DEFAULT_EXTENSIONS)->end()
             ->booleanNode('soft_delete')->defaultTrue()->end()
             ->integerNode('trash_ttl_days')->defaultValue(30)->end()
+            ->scalarNode('active_ttl_days')
+            ->defaultNull()
+            ->info('When set (>0), `file-uploader:cleanup` also PURGES active (non-trashed) files older than this many days. Null/0 = disabled (default). Use only for staging areas where uploads are transient; a general uploader must not silently expire live files.')
+            ->end()
+            ->integerNode('chunk_ttl_days')
+            ->defaultValue(0)
+            ->info('When set (>0), `file-uploader:cleanup` removes incomplete `.chunks/<uploadId>/` directories from aborted uploads whose newest chunk is older than this many days. 0 = disabled (default). Opt-in for BC symmetry with active_ttl_days.')
+            ->end()
             ->scalarNode('route_prefix')->defaultValue('file-upload')->end()
             ->arrayNode('locales')->scalarPrototype()->end()->defaultValue(['en', 'ru', 'es', 'pt', 'zh', 'fr', 'de', 'sr'])->end()
             ->scalarNode('locale')->defaultValue('en')->end()
@@ -213,9 +222,27 @@ final class FileUploaderBundle extends AbstractBundle
             ->tag('controller.service_arguments')
             ->public();
 
+        // Staging garbage collector: age-based GC of abandoned active files and
+        // stale chunk directories (the core only purges trash). Uses the bundle's
+        // own Flysystem operator for chunk-dir mtimes, which the Storage seam omits.
+        $services->set('xakki_file_uploader.gc', StagingGarbageCollector::class)
+            ->args([
+                service('xakki_file_uploader.manager'),
+                service('xakki_file_uploader.storage'),
+                $operator,
+                service('xakki_file_uploader.clock'),
+                service('xakki_file_uploader.logger'),
+                $config['temporary_directory'],
+            ]);
+
         // Console commands.
         $services->set(CleanupTrashCommand::class)
-            ->args([service('xakki_file_uploader.manager')])
+            ->args([
+                service('xakki_file_uploader.manager'),
+                service('xakki_file_uploader.gc'),
+                $config['active_ttl_days'] !== null ? (int) $config['active_ttl_days'] : null,
+                (int) $config['chunk_ttl_days'],
+            ])
             ->tag('console.command');
         $services->set(SyncMetadataCommand::class)
             ->args([service('xakki_file_uploader.manager')])

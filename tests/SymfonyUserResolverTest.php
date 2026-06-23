@@ -24,13 +24,13 @@ final class SymfonyUserResolverTest extends TestCase
 
     public function test_id_returns_the_user_identifier(): void
     {
-        $user = $this->createMock(UserInterface::class);
+        $user = $this->createStub(UserInterface::class);
         $user->method('getUserIdentifier')->willReturn('alice');
 
-        $token = $this->createMock(TokenInterface::class);
+        $token = $this->createStub(TokenInterface::class);
         $token->method('getUser')->willReturn($user);
 
-        $storage = $this->createMock(TokenStorageInterface::class);
+        $storage = $this->createStub(TokenStorageInterface::class);
         $storage->method('getToken')->willReturn($token);
 
         self::assertSame('alice', (new SymfonyUserResolver($storage))->id());
@@ -38,10 +38,10 @@ final class SymfonyUserResolverTest extends TestCase
 
     public function test_has_any_role_delegates_to_the_authorization_checker(): void
     {
-        $storage = $this->createMock(TokenStorageInterface::class);
-        $storage->method('getToken')->willReturn($this->createMock(TokenInterface::class));
+        $storage = $this->createStub(TokenStorageInterface::class);
+        $storage->method('getToken')->willReturn($this->createStub(TokenInterface::class));
 
-        $checker = $this->createMock(AuthorizationCheckerInterface::class);
+        $checker = $this->createStub(AuthorizationCheckerInterface::class);
         $checker->method('isGranted')->willReturnCallback(
             static fn (string $role): bool => $role === 'ROLE_ADMIN',
         );
